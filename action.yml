@@ -7,6 +7,11 @@ inputs:
     required: false
     default: "1000"
 
+  comment:
+    description: "Comment the generated report on the pull request or issue"
+    required: false
+    default: "false"
+
   max-display-lines:
     description: "Maximum diff lines displayed per file"
     required: false
@@ -167,3 +172,28 @@ runs:
               echo "changed-files-count=${FILE_COUNT}" >> "$GITHUB_OUTPUT"
               echo "has-large-changes=${LARGE_CHANGE}" >> "$GITHUB_OUTPUT"
           ````
+
+    - if: ${{ inputs.comment == 'true' }}
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ github.token }}
+        script: |
+          const fs = require('fs');
+
+          const issueNumber = context.issue.number;
+
+          if (!issueNumber) {
+            core.info('Skipping comment because no issue or pull request number is available.');
+            return;
+          }
+
+          const body =
+            '<!-- viewfile-report -->\n' +
+            fs.readFileSync('${{ steps.generate.outputs.report-path }}', 'utf8');
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issueNumber,
+            body
+          });
