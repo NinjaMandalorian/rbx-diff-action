@@ -20,7 +20,7 @@ inputs:
   report-path:
     description: "Path to generated markdown report"
     required: false
-    default: "viewfile-report.md"
+    default: "fileview-report.md"
 
 outputs:
   report-path:
