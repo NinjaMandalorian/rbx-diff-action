@@ -2,6 +2,10 @@
 
 Uses [rbx-fileview](https://github.com/Barocena/RBX-Fileview) to create readable yaml diffs for file changes
 
+## Warning
+
+This action **assumes** you have RBX-Fileview in the project's rokit.toml manifest. Ensure it does before usage.
+
 ## Usage
 
 Add this action to your GitHub Actions workflow to generate readable diffs for Roblox files. You can target place files (`.rbxl`, `.rbxlx`), model files (`.rbxm`, `.rbxmx`), or both.
